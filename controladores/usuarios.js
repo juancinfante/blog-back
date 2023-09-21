@@ -1,5 +1,7 @@
 const Usuario = require("../modelos/usuarios");
 const bcrypt = require('bcrypt');
+const { json } = require("body-parser");
+const jwt = require('jsonwebtoken');
 
 
 const loginUsuario = async (req, res) => {
@@ -18,10 +20,23 @@ const loginUsuario = async (req, res) => {
                     msg: "Email o contraseña incorrectos"
                 })
             }
+
+            const payload = {
+                id: usuarioExiste._id,
+                username: usuarioExiste.username,
+                rol: usuarioExiste
+            }
+
+            const token = jwt.sign(payload,process.env.SECRET_JWT,{
+                expiresIn: "10s"
+            })
+
             res.status(200).json({
                 msg: "Logueado con exito!",
-                id: usuarioExiste._id
+                id: usuarioExiste._id,
+                token
             })
+            
         }
 
     } catch (error) {
@@ -62,7 +77,7 @@ const registroUsuario = async (req, res) => {
 
 const obtenerUsuario = async (req, res) => {
     try {
-        const usuario = await Usuario.find({ _id: req.params.id });
+        const usuario = await Usuario.findById(req.params.id);
         if (!usuario) {
             return res.status(404).json({
                 ok: false,
@@ -74,7 +89,9 @@ const obtenerUsuario = async (req, res) => {
             usuario
         });
     } catch (error) {
-        console.log(error)
+        res.status(400).json({
+            msg: "ID NO VALIDA"
+        })  
     }
 }
 

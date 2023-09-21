@@ -1,10 +1,16 @@
-const { Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const articuloSchema = new Schema({
     titulo: {
         type: String
     },
     descripcion: {
+        type: String
+    },
+    contenido: {
+        type: String
+    },
+    autor: {
         type: String
     },
     imagen: {
