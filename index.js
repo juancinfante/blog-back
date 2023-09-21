@@ -16,3 +16,4 @@ app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000
 
 app.use('/articulos', require('./rutas/articulos'));
 app.use('/auth', require('./rutas/auth'));
+app.use('/comentario', require('./rutas/comentarios'));
